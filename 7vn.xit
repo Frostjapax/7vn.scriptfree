@@ -1,0 +1,308 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# ==========================================
+#  REPRODUTOR DE MÚSICA DE FUNDO
+# ==========================================
+URL_MUSICA="https://files.catbox.moe/sa2s9b.mp3"
+
+command -v mpv >/dev/null 2>&1 || pkg install mpv -y >/dev/null 2>&1
+
+parar_musica() {
+  if [ -n "$MUSICA_PID" ] && kill -0 "$MUSICA_PID" 2>/dev/null; then
+    kill "$MUSICA_PID" 2>/dev/null
+  fi
+}
+trap parar_musica EXIT INT TERM
+
+if [ "$URL_MUSICA" != "https://exemplo.com/sua_musica.mp3" ]; then
+  mpv --no-video --loop-file=inf --volume=40 "$URL_MUSICA" > /dev/null 2>&1 &
+  MUSICA_PID=$!
+fi
+
+# ==========================================
+#  PALETA DE CORES HELLO KITTY VIP
+# ==========================================
+ROSA_CHOQUE='\033[38;2;255;20;147m'
+ROSA_PASTEL='\033[38;2;255;105;180m'
+ROSA_FOFO='\033[38;2;255;182;193m'
+ROSA_MAGENTA='\033[38;2;255;0;128m'
+BRANCO='\033[38;2;255;255;255m'
+AMARELO_LACO='\033[38;2;255;215;0m'
+ROXO_SUAVE='\033[38;2;218;112;214m'
+NC='\033[0m'
+
+KEY_FILE="$HOME/.hello_kitty_vip.key"
+CHAVE_VALIDA="7VN-KITTY-VIP"
+
+# ==========================================
+#  ENTRADA PERSONALIZADA DE X E Y
+# ==========================================
+pedir_xy() {
+  echo ""
+  echo -e "${AMARELO_LACO}🎀 SENSIBILIDADE DOS EIXOS X E Y 🎀${NC}"
+  read -p "   🎀 Digite a sensibilidade do Eixo X: " VAL_X
+  read -p "   🎀 Digite a sensibilidade do Eixo Y: " VAL_Y
+  
+  VAL_X=${VAL_X:-1000}
+  VAL_Y=${VAL_Y:-1000}
+
+  setprop debug.touch.x_multiplier "$VAL_X" > /dev/null 2>&1
+  setprop debug.touch.y_multiplier "$VAL_Y" > /dev/null 2>&1
+  setprop persist.sys.input.x_scale "$VAL_X" > /dev/null 2>&1
+  setprop persist.sys.input.y_scale "$VAL_Y" > /dev/null 2>&1
+  setprop debug.touch.aim_lock_xy 1 > /dev/null 2>&1
+}
+
+# ==========================================
+#  VERIFICAÇÃO DE LICENÇA
+# ==========================================
+verificar_licenca() {
+  clear
+  echo -e "${ROSA_CHOQUE}"
+  echo "  ██╗  ██╗███████╗██╗     ██╗      ██████╗     ██╗██╗████████╗████████╗██╗   ██╗"
+  echo "  ██║  ██║██╔════╝██║     ██║     ██╔═══██╗    ██║██║╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝"
+  echo "  ███████║█████╗  ██║     ██║     ██║   ██║    ██║██║   ██║      ██║    ╚████╔╝ "
+  echo "  ██╔══██║██╔══╝  ██║     ██║     ██║   ██║    ██║██║   ██║      ██║     ╚██╔╝  "
+  echo "  ██║  ██║███████╗███████╗███████╗╚██████╔╝    ██║██║   ██║      ██║      ██║   "
+  echo "  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝     ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝   "
+  echo -e "${NC}"
+  echo -e "${ROSA_PASTEL}      /\_/\   ${AMARELO_LACO}🎀 VERIFICANDO REGISTRO VIP ULTRA... 🎀${NC}"
+  echo -e "${ROSA_PASTEL}     ( o.o )  ${ROSA_FOFO}=================================================${NC}"
+  echo -e "${ROSA_PASTEL}      > ^ <   ${ROSA_MAGENTA}TikTok: 7vn&120hz${NC}"
+  echo ""
+
+  if [ -f "$KEY_FILE" ] && [ "$(cat "$KEY_FILE")" == "$CHAVE_VALIDA" ]; then
+    echo -e "${ROSA_PASTEL}   🎀 [SUCESSO] Licença Ativa! Carregando Painel Hello Kitty VIP... 🎀${NC}"
+    sleep 1
+    return 0
+  else
+    echo "$CHAVE_VALIDA" > "$KEY_FILE"
+    echo -e "${ROSA_PASTEL}   🎀 Autocriando chave local e liberando acesso VIP! 🎀${NC}"
+    sleep 1
+    return 0
+  fi
+}
+
+verificar_licenca
+
+# ==========================================
+#  CABECALHO HELLO KITTY
+# ==========================================
+exibir_cabecalho() {
+  clear
+  echo -e "${ROSA_CHOQUE}"
+  echo "  ██╗  ██╗███████╗██╗     ██╗      ██████╗     ██╗██╗████████╗████████╗██╗   ██╗"
+  echo "  ██║  ██║██╔════╝██║     ██║     ██╔═══██╗    ██║██║╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝"
+  echo "  ███████║█████╗  ██║     ██║     ██║   ██║    ██║██║   ██║      ██║    ╚████╔╝ "
+  echo "  ██╔══██║██╔══╝  ██║     ██║     ██║   ██║    ██║██║   ██║      ██║     ╚██╔╝  "
+  echo "  ██║  ██║███████╗███████╗███████╗╚██████╔╝    ██║██║   ██║      ██║      ██║   "
+  echo "  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝     ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝   "
+  echo -e "${NC}"
+  echo -e "${ROSA_PASTEL}      /\_/\   ${AMARELO_LACO}🎀 7VN OPTIMIZER VIP - HELLO KITTY EDITION v6.0 🎀${NC}"
+  echo -e "${ROSA_PASTEL}     ( o.o )  ${ROSA_FOFO}=================================================${NC}"
+  echo -e "${ROSA_PASTEL}      > ^ <   ${ROSA_MAGENTA}TikTok: 7vn&120hz${NC}"
+  echo ""
+}
+
+# ==========================================
+#  MENU PRINCIPAL
+# ==========================================
+while true; do
+  exibir_cabecalho
+
+  echo -e "${ROSA_CHOQUE}┌──────────────────────────────────────────────────────────┐${NC}"
+  echo -e "${ROSA_CHOQUE}│                 🎀 PAINEL DE OTIMIZAÇÕES VIP 🎀          │${NC}"
+  echo -e "${ROSA_CHOQUE}└──────────────────────────────────────────────────────────┘${NC}"
+  echo -e "${ROSA_PASTEL}   [1]${NC} ${ROSA_FOFO} Modo Emulador (Com X e Y) 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [2]${NC} ${ROSA_FOFO} 7VN Injetor Touch 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [3]${NC} ${ROSA_FOFO} Mouse Easy (Com X e Y) 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [4]${NC} ${ROSA_FOFO} Zero Delay Touch 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [5]${NC} ${ROSA_FOFO} Aceleração de Eixos (100 Códigos) 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [6]${NC} ${ROSA_CHOQUE} 7VN Segredinho VIP 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [7]${NC} ${AMARELO_LACO} Unlock 120 FPS 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [8]${NC} ${ROSA_FOFO} Sair 🎀${NC}"
+  echo ""
+
+  read -p "   🎀 Escolha uma opção [1-8]: " opcao
+
+  case $opcao in
+    1)
+      pedir_xy
+      setprop debug.hwui.renderer skiavk > /dev/null 2>&1
+      setprop windowsmgr.max_events_per_sec 240 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 Modo Emulador configurado com sucesso! 🎀${NC}"
+      ;;
+    2)
+      settings put system peak_refresh_rate 120.0 > /dev/null 2>&1
+      settings put system min_refresh_rate 120.0 > /dev/null 2>&1
+      setprop debug.performance.touch 1 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 7VN Injetor Touch ativado! 🎀${NC}"
+      ;;
+    3)
+      pedir_xy
+      setprop debug.touch.mouse_easy 1 > /dev/null 2>&1
+      settings put system pointer_speed 7 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 Mouse Easy calibrado! 🎀${NC}"
+      ;;
+    4)
+      setprop debug.performance.touch 1 > /dev/null 2>&1
+      setprop ro.input.noresample 1 > /dev/null 2>&1
+      setprop view.touch_slop 2 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 Touch Zero Delay aplicado! 🎀${NC}"
+      ;;
+    5)
+      # ==========================================
+      # 100 CÓDIGOS DE ACELERAÇÃO DE EIXOS E TOUCH
+      # ==========================================
+      setprop persist.sys.input.x.speed max > /dev/null 2>&1
+      setprop persist.sys.input.y.speed max > /dev/null 2>&1
+      setprop debug.touch.accel_x 999 > /dev/null 2>&1
+      setprop debug.touch.accel_y 999 > /dev/null 2>&1
+      setprop debug.touch.accel_factor 10 > /dev/null 2>&1
+      setprop persist.sys.touch.rate 240 > /dev/null 2>&1
+      setprop persist.sys.touch.response 1 > /dev/null 2>&1
+      setprop persist.sys.touch.sensitivity 100 > /dev/null 2>&1
+      setprop debug.input.velocity_tracker 1 > /dev/null 2>&1
+      setprop debug.input.pointer_movement 1 > /dev/null 2>&1
+      setprop persist.sys.touch.pressure_scale 0.001 > /dev/null 2>&1
+      setprop persist.sys.touch.size_scale 1 > /dev/null 2>&1
+      setprop persist.sys.touch.orientation_scale 1 > /dev/null 2>&1
+      setprop persist.sys.touch.distance_scale 1 > /dev/null 2>&1
+      setprop persist.sys.touch.tilt_scale 1 > /dev/null 2>&1
+      setprop debug.touch.gesture_mode 0 > /dev/null 2>&1
+      setprop debug.touch.filter_level 0 > /dev/null 2>&1
+      setprop debug.touch.boost 1 > /dev/null 2>&1
+      setprop persist.sys.touch.smooth 1 > /dev/null 2>&1
+      setprop debug.touch.fast_response 1 > /dev/null 2>&1
+
+      setprop persist.sys.input.accel_1 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_2 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_3 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_4 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_5 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_6 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_7 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_8 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_9 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_10 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_11 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_12 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_13 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_14 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_15 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_16 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_17 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_18 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_19 100 > /dev/null 2>&1
+      setprop persist.sys.input.accel_20 100 > /dev/null 2>&1
+
+      setprop debug.touch.axis_boost_1 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_2 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_3 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_4 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_5 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_6 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_7 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_8 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_9 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_10 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_11 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_12 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_13 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_14 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_15 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_16 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_17 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_18 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_19 1 > /dev/null 2>&1
+      setprop debug.touch.axis_boost_20 1 > /dev/null 2>&1
+
+      setprop persist.sys.motion.boost_1 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_2 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_3 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_4 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_5 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_6 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_7 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_8 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_9 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_10 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_11 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_12 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_13 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_14 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_15 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_16 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_17 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_18 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_19 max > /dev/null 2>&1
+      setprop persist.sys.motion.boost_20 max > /dev/null 2>&1
+
+      setprop debug.input.fast_axis_1 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_2 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_3 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_4 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_5 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_6 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_7 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_8 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_9 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_10 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_11 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_12 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_13 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_14 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_15 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_16 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_17 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_18 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_19 999 > /dev/null 2>&1
+      setprop debug.input.fast_axis_20 999 > /dev/null 2>&1
+
+      setprop persist.sys.touch.ultra_sync_1 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_2 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_3 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_4 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_5 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_6 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_7 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_8 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_9 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_10 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_11 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_12 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_13 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_14 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_15 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_16 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_17 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_18 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_19 1 > /dev/null 2>&1
+      setprop persist.sys.touch.ultra_sync_20 1 > /dev/null 2>&1
+
+      echo -e "${ROSA_PASTEL}🎀 Aceleração de eixos com 100 códigos ativada! 🎀${NC}"
+      ;;
+    6)
+      setprop debug.sf.fps 144 > /dev/null 2>&1
+      setprop persist.sys.ff.vip_mode 1 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 Segredinho VIP 7VN ativado! 🎀${NC}"
+      ;;
+    7)
+      setprop persist.sys.ff_unlock_ultra_fps 1 > /dev/null 2>&1
+      settings put system peak_refresh_rate 120.0 > /dev/null 2>&1
+      settings put system min_refresh_rate 120.0 > /dev/null 2>&1
+      echo -e "${ROSA_PASTEL}🎀 Unlock 120 FPS aplicado com sucesso! 🎀${NC}"
+      ;;
+    8)
+      echo -e "${ROSA_PASTEL}Saindo... Siga no TikTok: 7vn&120hz 🎀${NC}"
+      exit 0
+      ;;
+    *)
+      echo -e "${ROSA_CHOQUE}Opção inválida!${NC}"
+      ;;
+  esac
+
+  echo ""
+  read -p "Pressione [Enter] para voltar ao menu..."
+done
+
